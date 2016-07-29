@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="HelloWord">
+<head>
+	<title>Cheque</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap.css">
+	<style>
+		.jumbotron{
+			width: 400px;
+			text-align: center;
+			margin-left: auto;
+			margin-top: 20px;
+			margin-right: auto;
+		}
+		.table{
+			margin-top: 20px
+		}
+		.form-control{
+			margin-bottom: 5px;
+		}
+		.selecionado{
+			background: yellow
+		}
+		.negrito{
+			font-weight: bold
+		}
+	</style>
+	<script src="angular.js"></script>
+	<scr>
+	<script>
+		angular.module("HelloWord",[]);
+		angular.module("HelloWord").controller("listaChequeCtrl", function ($scope) {
+			$scope.tituloCheque = "Cheque";
+			$scope.cheques = [
+				{dtCheque:"10-10-2015", nrPessoa: "20", nrCheque:"20"},
+				{dtCheque:"10-11-2015", nrPessoa: "22", nrCheque:"21"},
+				{dtCheque:"10-12-2015", nrPessoa: "22", nrCheque:"22"}
+			];
+			$scope.clientes =[
+				{nome: "Celso", codigo:100, pct: 5},
+				{nome: "Tici", codigo:101, pct: 15},
+				{nome: "Printset", codigo:102, pct: 10}
+			];
+			$scope.adicionarCheque = function(novoCheque){
+				$scope.cheques.push(angular.copy(novoCheque));
+				delete $scope.chequeIn;
+			};
+			$scope.apagarCheque = function(cheques){
+				$scope.cheques = cheques.filter(function(cheque){
+				if (!cheque.selecionado) return cheque;
+				});
+			};
+			$scope.chequeSelecionado = function(cheques){
+				return chequeSelecionado =	cheques.some(function(cheque){
+						return cheque.selecionado;
+					});
+			};
+
+		});
+	</script>
+</head>
+<body ng-controller="listaChequeCtrl">
+	<div class="jumbotron">
+		<h3>{{tituloCheque}}</h3>
+		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="Filtro de Busca" />
+		<table class="table">
+			<tr>
+				<th></th>
+				<th>Data do Cheque</th>
+				<th>Codigo Pessoa</th>
+				<th>Numero Cheque</th>
+				<th>Cliente</th>
+			</tr>
+			<tr ng-class="{'selecionado negrito': cheque.selecionado}" ng-repeat= "cheque in cheques | filter: criterioDeBusca">
+				<td><input type="checkbox" ng-model="cheque.selecionado"></td>
+				<td>{{cheque.dtCheque}}</td>
+				<td>{{cheque.nrPessoa}}</td>
+				<td>{{cheque.nrCheque}}</td>
+				<td>{{cheque.cliente.nome}}</td>
+			</tr>
+		</table>
+
+		<hr/>
+		<input class="form-control" type="text" ng-model="chequeIn.dtCheque" placeholder="Data do Cheque" />
+		<input class="form-control" type="text" ng-model="chequeIn.nrPessoa" placeholder="Codigo Pessoa"/>
+		<input class="form-control" type="text" ng-model="chequeIn.nrCheque" placeholder="Numero do Cheque"/>
+		<select class="form-control" ng-model="chequeIn.cliente" ng-options="cliente.nome for cliente in clientes">
+			<option value="">Selecione o cliente</option>
+		</select>
+		<button class = "btn btn-block btn-primary" ng-click="adicionarCheque(chequeIn)" ng-disabled="!chequeIn.dtCheque || !chequeIn.nrPessoa || !chequeIn.nrCheque || !chequeIn.cliente">Adicionar Cheque</button>
+		<button class = "btn btn-block btn-danger" ng-click="apagarCheque(cheques)" ng-disabled="!chequeSelecionado(cheques)" >Deletar Cheque</button>
+	</div>
+</body>
+</html>
