@@ -33,16 +33,9 @@ var conString = "postgres://postgres:123456@localhost/cheque";
     });
   };
 
-  
-
-
-
-
   module.exports.insertCheque = function(cheque){
-    var query1 = "INSERT INTO cheque(dt_cheque, nr_pessoa, nr_cheque) VALUES($1,$2,$3)";
-    var params = [cheque.dtCheque, cheque.cliente.nr_pessoa, cheque.nrCheque];
-    console.log(cheque);
-    console.log("___________________________________");
+    var query1 = "INSERT INTO cheque(dt_cheque, nr_pessoa, nr_cheque, vl_cheque, vl_receber) VALUES($1,$2,$3,$4,$5)";
+    var params = [cheque.dtCheque, cheque.cliente.nr_pessoa, cheque.nrCheque, cheque.vlCheque, (cheque.cliente.pct *  cheque.vlCheque )/ 100];
     return query(query1, params)
   };
 
@@ -50,11 +43,7 @@ var conString = "postgres://postgres:123456@localhost/cheque";
   module.exports.deleteCheque = function(cheque){
     var query1 = "DELETE from cheque where nr_cheque = $1";
     var params = [cheque.nr_cheque];
-    query(query1, params).then(function (result) {
-      console.log("Deletedo com Sucesso");
-    }).catch(function(error) {
-       console.log(error);
-      });
+    return query(query1, params)
   };
 
   module.exports.updateCheque = function(cheque){
@@ -77,8 +66,21 @@ var conString = "postgres://postgres:123456@localhost/cheque";
       });
   };
 
+  module.exports.insertPessoa = function(pessoa){
+    var query1 = "INSERT INTO pessoa(nm_pessoa, pct) VALUES($1,$2)";
+    var params = [pessoa.nmPessoa, pessoa.pct];
+    return query(query1, params)
+  };
+
+
+  module.exports.deletaPessoa = function(pessoa){
+    var query1 = "DELETE from pessoa where nr_pessoa = $1";
+    var params = [pessoa.nr_pessoa];
+    return query(query1, params)
+  };
+
   module.exports.listAll = function(){
-    var query1 = "select c.dt_cheque, c.nr_cheque, p.nm_pessoa, p.pct from cheque c, pessoa p where c.nr_pessoa = p.nr_pessoa";
+    var query1 = "select c.dt_cheque, c.nr_cheque, p.nm_pessoa, p.pct, c.vl_cheque, c.vl_receber from cheque c, pessoa p where c.nr_pessoa = p.nr_pessoa";
     return query(query1, [])
   };
 

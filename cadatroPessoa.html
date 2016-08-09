@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html ng-app="cadastroPessoa">
+<head>
+	<title>pessoa</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap.css">
+	<style>
+		.jumbotron{
+			width: 700px;
+			text-align: center;
+			margin-left: auto;
+			margin-top: 20px;
+			margin-right: auto;
+		}
+		.table{
+			margin-top: 20px
+		}
+		.form-control{
+			margin-bottom: 5px;
+		}
+		.selecionado{
+			background: yellow
+		}
+		.negrito{
+			font-weight: bold
+		}
+	</style>
+	<script src="angular.js"></script>
+	<scr>
+	<script>
+		angular.module("cadastroPessoa",[]);
+		angular.module("cadastroPessoa").controller("cadastraPessoa", function ($scope, $http) {
+			$scope.tituloPessoa = "Cadastro Pessoa";
+			$scope.pessoas = [];
+			$scope.clientes =[];
+			$scope.adicionaPessoa = function(novaPessoa){
+				$http.post("http://localhost:8081/adicionaPessoa", novaPessoa).success(function (data){
+				delete $scope.pessoaIn;
+				carregarCliente();
+				});
+				/*$scope.pessoas.push(angular.copy(novoCheque));*/
+			};
+			$scope.apagaPessoa = function(pessoas){
+				$scope.pessoas = pessoas.filter(function(pessoa){
+				if (pessoa.selecionado) 
+					$http.post("http://localhost:8081/deletaPessoa", pessoa).success(function (data){
+					carregarCliente();
+					});
+				});
+			};
+			$scope.pessoaselecionado = function(pessoas){
+				return pessoaselecionado =	pessoas.some(function(pessoa){
+						return pessoa.selecionado;
+					});
+			};
+
+			var carregarCliente = function (){
+				$http.get("http://localhost:8081/consultaCliente").success(function(data, status) {
+					$scope.pessoas = data;
+				});			
+			};			
+			carregarCliente();
+
+		});
+	</script>
+</head>
+<body ng-controller="cadastraPessoa">
+	<div class="jumbotron">
+		<h3>{{tituloPessoa}}</h3>
+		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="Filtro de Busca" />
+		<table class="table">
+			<tr>
+				<th></th>
+				<td>Nome</td>
+				<td>Porcentagem</td>
+			</tr>
+			<tr ng-class="{'selecionado negrito': pessoa.selecionado}" ng-repeat= "pessoa in pessoas | filter: criterioDeBusca">
+				<td><input type="checkbox" ng-model="pessoa.selecionado"></td>
+				<td>{{pessoa.nm_pessoa}}</td>
+				<td>{{pessoa.pct}}</td>
+			</tr>
+		</table>
+
+		<hr/>
+		<input class="form-control" type="text" ng-model="pessoaIn.nmPessoa" placeholder="Nome" />
+		<input class="form-control" type="text" ng-model="pessoaIn.pct" placeholder="Porcentagem a ganhar"/>
+
+		<button class = "btn btn-block btn-primary" ng-click="adicionaPessoa(pessoaIn)" ng-disabled="!pessoaIn.nmPessoa || !pessoaIn.pct">Adicionar pessoa</button>
+		<button class = "btn btn-block btn-danger" ng-click="apagaPessoa(pessoas)" ng-disabled="!pessoaselecionado(pessoas)" >Deletar pessoa</button>
+	</div>
+</body>
+</html>

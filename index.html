@@ -5,7 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="bootstrap.css">
 	<style>
 		.jumbotron{
-			width: 400px;
+			width: 700px;
 			text-align: center;
 			margin-left: auto;
 			margin-top: 20px;
@@ -41,7 +41,10 @@
 			};
 			$scope.apagarCheque = function(cheques){
 				$scope.cheques = cheques.filter(function(cheque){
-				if (!cheque.selecionado) return cheque;
+				if (cheque.selecionado) 
+					$http.post("http://localhost:8081/deletaCheque", cheque).success(function (data){
+					carregarCheques();
+					});
 				});
 			};
 			$scope.chequeSelecionado = function(cheques){
@@ -74,11 +77,13 @@
 		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="Filtro de Busca" />
 		<table class="table">
 			<tr>
-				<th></th>
-				<th>Data do Cheque</th>
-				<th>Numero Cheque</th>
-				<th>Cliente</th>
-				<th>%</th>
+				<td></td>
+				<td>Data do Cheque</td>
+				<td>Numero Cheque</td>
+				<td>Cliente</td>
+				<td>%</td>
+				<td>Valor</td>
+				<td>Receber</td>
 			</tr>
 			<tr ng-class="{'selecionado negrito': cheque.selecionado}" ng-repeat= "cheque in cheques | filter: criterioDeBusca">
 				<td><input type="checkbox" ng-model="cheque.selecionado"></td>
@@ -86,12 +91,15 @@
 				<td>{{cheque.nr_cheque}}</td>
 				<td>{{cheque.nm_pessoa}}</td>
 				<td>{{cheque.pct}}</td>
+				<td>{{cheque.vl_cheque}}</td>
+				<td>{{cheque.vl_receber}}</td>
 			</tr>
 		</table>
 
 		<hr/>
 		<input class="form-control" type="text" ng-model="chequeIn.dtCheque" placeholder="Data do Cheque" />
 		<input class="form-control" type="text" ng-model="chequeIn.nrCheque" placeholder="Numero do Cheque"/>
+		<input class="form-control" type="text" ng-model="chequeIn.vlCheque" placeholder="Valor do Cheque"/>
 		<select class="form-control" ng-model="chequeIn.cliente" ng-options="cliente.nm_pessoa for cliente in clientes">
 			<option value="">Selecione o cliente</option>
 		</select>
