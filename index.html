@@ -1,73 +1,14 @@
 <!DOCTYPE html>
-<html ng-app="HelloWord">
+<html ng-app="Cheque">
 <head>
 	<title>Cheque</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap.css">
-	<style>
-		.jumbotron{
-			width: 700px;
-			text-align: center;
-			margin-left: auto;
-			margin-top: 20px;
-			margin-right: auto;
-		}
-		.table{
-			margin-top: 20px
-		}
-		.form-control{
-			margin-bottom: 5px;
-		}
-		.selecionado{
-			background: yellow
-		}
-		.negrito{
-			font-weight: bold
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="css/chequeCSS">
 	<script src="angular.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/controllers/Cheque.js"></script>
+	<script src="js/services/chequeAPIService.js"></script>
 	<scr>
-	<script>
-		angular.module("HelloWord",[]);
-		angular.module("HelloWord").controller("listaChequeCtrl", function ($scope, $http) {
-			$scope.tituloCheque = "Cheque";
-			$scope.cheques = [];
-			$scope.clientes =[];
-			$scope.adicionarCheque = function(novoCheque){
-				$http.post("http://localhost:8081/adicionarCheques", novoCheque).success(function (data){
-				delete $scope.chequeIn;
-				carregarCheques();
-				});
-				/*$scope.cheques.push(angular.copy(novoCheque));*/
-			};
-			$scope.apagarCheque = function(cheques){
-				$scope.cheques = cheques.filter(function(cheque){
-				if (cheque.selecionado) 
-					$http.post("http://localhost:8081/deletaCheque", cheque).success(function (data){
-					carregarCheques();
-					});
-				});
-			};
-			$scope.chequeSelecionado = function(cheques){
-				return chequeSelecionado =	cheques.some(function(cheque){
-						return cheque.selecionado;
-					});
-			};
-
-			var carregarCheques = function (){
-				$http.get("http://localhost:8081/consulta").success(function(data, status) {
-					$scope.cheques = data;
-				});			
-			};
-			var carregarCliente = function (){
-				$http.get("http://localhost:8081/consultaCliente").success(function(data, status) {
-					$scope.clientes = data;
-				});			
-			};			
-			carregarCheques();
-			carregarCliente();
-
-		});
-	</script>
 </head>
 <body ng-controller="listaChequeCtrl">
 	<div class="jumbotron">
