@@ -2,6 +2,10 @@ angular.module("Cheque").controller("listaChequeCtrl", function ($scope, $http, 
 			$scope.tituloCheque = "Cheque";
 			$scope.cheques = [];
 			$scope.clientes =[];
+			$scope.ordenar = function(keyname){
+				$scope.sortKey = keyname;
+				$scope.reverse = !$scope.reverse;
+			};
 			$scope.adicionarCheque = function(novoCheque){
 				chequeAPI.setCheque(novoCheque).success(function (data){
 				delete $scope.chequeIn;
@@ -28,7 +32,7 @@ angular.module("Cheque").controller("listaChequeCtrl", function ($scope, $http, 
 				});			
 			};
 			var carregarCliente = function (){
-				chequeAPI.loadCheque().success(function(data, status) {
+				chequeAPI.loadCliente().success(function(data, status) {
 					$scope.clientes = data;
 				});			
 			};			

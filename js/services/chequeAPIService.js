@@ -12,7 +12,7 @@ angular.module("Cheque").factory("chequeAPI", function ($http) {
 		return $http.post("http://localhost:8081/deletaCheque", delCheque);
 	};
 
-	var _loadCheque = function () {
+	var _loadCliente = function () {
 		return $http.get("http://localhost:8081/consultaCliente");
 	};
 
@@ -20,6 +20,6 @@ angular.module("Cheque").factory("chequeAPI", function ($http) {
 		getCheque: _getCheque,
 		setCheque: _setCheque,
 		delCheque: _delCheque,
-		loadCheque: _loadCheque
+		loadCliente: _loadCliente
 	};
 });

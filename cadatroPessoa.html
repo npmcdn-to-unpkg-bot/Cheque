@@ -3,65 +3,12 @@
 <head>
 	<title>pessoa</title>
 	<link rel="stylesheet" type="text/css" href="bootstrap.css">
-	<style>
-		.jumbotron{
-			width: 700px;
-			text-align: center;
-			margin-left: auto;
-			margin-top: 20px;
-			margin-right: auto;
-		}
-		.table{
-			margin-top: 20px
-		}
-		.form-control{
-			margin-bottom: 5px;
-		}
-		.selecionado{
-			background: yellow
-		}
-		.negrito{
-			font-weight: bold
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="css/pessoaCSS">
 	<script src="angular.js"></script>
+	<script src="js/appPessoa.js"></script>
+	<script src="js/controllers/pessoa.js"></script>
+	<script src="js/services/clienteAPIService.js"></script>
 	<scr>
-	<script>
-		angular.module("cadastroPessoa",[]);
-		angular.module("cadastroPessoa").controller("cadastraPessoa", function ($scope, $http) {
-			$scope.tituloPessoa = "Cadastro Pessoa";
-			$scope.pessoas = [];
-			$scope.clientes =[];
-			$scope.adicionaPessoa = function(novaPessoa){
-				$http.post("http://localhost:8081/adicionaPessoa", novaPessoa).success(function (data){
-				delete $scope.pessoaIn;
-				carregarCliente();
-				});
-				/*$scope.pessoas.push(angular.copy(novoCheque));*/
-			};
-			$scope.apagaPessoa = function(pessoas){
-				$scope.pessoas = pessoas.filter(function(pessoa){
-				if (pessoa.selecionado) 
-					$http.post("http://localhost:8081/deletaPessoa", pessoa).success(function (data){
-					carregarCliente();
-					});
-				});
-			};
-			$scope.pessoaselecionado = function(pessoas){
-				return pessoaselecionado =	pessoas.some(function(pessoa){
-						return pessoa.selecionado;
-					});
-			};
-
-			var carregarCliente = function (){
-				$http.get("http://localhost:8081/consultaCliente").success(function(data, status) {
-					$scope.pessoas = data;
-				});			
-			};			
-			carregarCliente();
-
-		});
-	</script>
 </head>
 <body ng-controller="cadastraPessoa">
 	<div class="jumbotron">

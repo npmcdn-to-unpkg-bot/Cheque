@@ -1,1 +1,1 @@
-		angular.module("Cheque",[]);
+	angular.module("Cheque",['angularUtils.directives.dirPagination']);

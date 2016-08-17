@@ -8,25 +8,25 @@
 	<script src="js/app.js"></script>
 	<script src="js/controllers/Cheque.js"></script>
 	<script src="js/services/chequeAPIService.js"></script>
+	<script src="dirPagination.js"></script>
 	<scr>
 </head>
 <body ng-controller="listaChequeCtrl">
 	<div class="jumbotron">
 		<h3>{{tituloCheque}}</h3>
-		{{cheques}}
-		{{chequeIn}}
 		<input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="Filtro de Busca" />
 		<table class="table">
 			<tr>
 				<td></td>
-				<td>Data do Cheque</td>
-				<td>Numero Cheque</td>
-				<td>Cliente</td>
-				<td>%</td>
-				<td>Valor</td>
-				<td>Receber</td>
+				<td ng-click="ordenar('dt_cheque')">Data do Cheque</td>
+				<td ng-click="ordenar('nr_cheque')">Numero Cheque</td>
+				<td ng-click="ordenar('nm_pessoa')">Cliente</td>
+				<td ng-click="ordenar('pct')">%</td>
+				<td ng-click="ordenar('vl_cheque')">Valor</td>
+				<td ng-click="ordenar('vl_receber')">Receber</td>
 			</tr>
-			<tr ng-class="{'selecionado negrito': cheque.selecionado}" ng-repeat= "cheque in cheques | filter: criterioDeBusca">
+			<tbody>
+			<tr ng-class="{'selecionado negrito': cheque.selecionado}" dir-paginate= "cheque in cheques | filter: criterioDeBusca |orderBy:sortKey:reverse | itemsPerPage:10">
 				<td><input type="checkbox" ng-model="cheque.selecionado"></td>
 				<td>{{cheque.dt_cheque | date: 'dd-MM-yyyy'}}</td>
 				<td>{{cheque.nr_cheque}}</td>
@@ -34,14 +34,15 @@
 				<td>{{cheque.pct}}</td>
 				<td>{{cheque.vl_cheque}}</td>
 				<td>{{cheque.vl_receber}}</td>
-			</tr>
+			</tr>	
+			</tbody>		
 		</table>
-
+		<dir-pagination-controls max-size="10" boundary-links="false"></dir-pagination-controls>
 		<hr/>
 		<input class="form-control" type="text" ng-model="chequeIn.dtCheque" placeholder="Data do Cheque" />
 		<input class="form-control" type="text" ng-model="chequeIn.nrCheque" placeholder="Numero do Cheque"/>
 		<input class="form-control" type="text" ng-model="chequeIn.vlCheque" placeholder="Valor do Cheque"/>
-		<select class="form-control" ng-model="chequeIn.cliente" ng-options="cliente.nm_pessoa for cliente in clientes">
+		<select class="form-control" ng-model="chequeIn.cliente" ng-options="cliente.nm_pessoa as (cliente.nm_pessoa +' - '+ cliente.pct) for cliente in clientes">
 			<option value="">Selecione o cliente</option>
 		</select>
 		<button class = "btn btn-block btn-primary" ng-click="adicionarCheque(chequeIn)" ng-disabled="!chequeIn.dtCheque || !chequeIn.nrCheque">Adicionar Cheque</button>
