@@ -1,0 +1,38 @@
+-- Table: cheque
+
+-- DROP TABLE cheque;
+
+CREATE TABLE cheque
+(
+  id_cheque serial NOT NULL,
+  dt_cheque text NOT NULL,
+  nr_cheque integer NOT NULL,
+  nr_pessoa integer NOT NULL,
+  vl_cheque numeric(13,2),
+  vl_receber numeric(13,2),
+  CONSTRAINT cheque_pkey PRIMARY KEY (id_cheque),
+  CONSTRAINT cheque_nr_cheque_key UNIQUE (nr_cheque)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE cheque
+  OWNER TO postgres;
+
+
+-- Table: pessoa
+
+-- DROP TABLE pessoa;
+
+CREATE TABLE pessoa
+(
+  nr_pessoa serial NOT NULL,
+  nm_pessoa character varying(100),
+  pct numeric(10,2),
+  CONSTRAINT pessoa_pkey PRIMARY KEY (nr_pessoa)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE pessoa
+  OWNER TO postgres;
